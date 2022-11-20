@@ -1,10 +1,14 @@
 const path = require('path');
-const TerserPlugin = require("terser-webpack-plugin");
+const fs = require('fs');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TampermonkeyHeaderPlugin = require('./src/webpack/tampermonkey-header-webpack-plugin');
 
 module.exports = {
   entry: {
+    CopySupportingPlayers: './src/userscripts/CopySupportingPlayers/index.ts',
+    SelectSupportsByPlayer: './src/userscripts/SelectSupportsByPlayer/index.ts'
   },
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -20,17 +24,33 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    filename: '[name].js',
+    filename: '[name]/[name].js',
   },
-  optimization: {
-    minimize: false,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          keep_classnames: true,
-          keep_fnames: true
-        }
-      })
-    ]
-  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new TampermonkeyHeaderPlugin({
+      resolveHeader: (dirname) => {
+        let header = fs.readFileSync(
+          path.resolve(__dirname, 'src/userscripts', dirname, 'metadata/header.txt'),
+          'utf8');
+
+        return header;
+      }
+    })
+  ],
 };
+
+
+/*
+{
+        header: (data) => {
+          let dirname = path.dirname(data.filename);
+
+          let header = fs.readFileSync(
+            path.resolve(__dirname, 'src/userscripts', dirname, 'metadata/header.txt'),
+            'utf8');
+
+          return header;
+        }
+      }
+      */
