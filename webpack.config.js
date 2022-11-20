@@ -7,7 +7,7 @@ module.exports = {
   entry: {
     SelectSupportsByPlayer: './src/userscripts/SelectSupportsByPlayer/index.ts'
   },
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
