@@ -7,7 +7,10 @@ import { DefenceTableRow, UIMessageService, UnitScreen } from "tw-framework";
         let msg = `Selected all supports of player '${playerName}'!`;
 
         for (const tableRow of tableRowElements) {
-            // if (tableRow.element.style.display)
+            if (tableRow.element.style.display != '') {
+                // ignore not displayed rows
+                continue; 
+            }
 
             let checkbox = tableRow.element.firstElementChild.firstElementChild as HTMLInputElement;
 
