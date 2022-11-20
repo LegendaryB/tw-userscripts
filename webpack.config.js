@@ -5,7 +5,6 @@ const TampermonkeyHeaderPlugin = require('./src/webpack/tampermonkey-header-webp
 
 module.exports = {
   entry: {
-    CopySupportingPlayers: './src/userscripts/CopySupportingPlayers/index.ts',
     SelectSupportsByPlayer: './src/userscripts/SelectSupportsByPlayer/index.ts'
   },
   mode: 'development',
