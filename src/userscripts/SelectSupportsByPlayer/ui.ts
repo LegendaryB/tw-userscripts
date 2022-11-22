@@ -1,6 +1,8 @@
 import { DefenceTableRow, UnitScreen } from "tw-framework";
 import { createElement } from "tw-framework";
 
+import { Translator } from "tw-framework";
+
 const ID_PREFIX = 'SelectSupportsByPlayer';
 const PLAYER_NAME_CONTAINER_ID = `${ID_PREFIX}_playerNameSelection`;
 const FILTER_TABLE_ID = `${ID_PREFIX}_filterTable`;
@@ -14,7 +16,11 @@ const FILTER_UNIT_VALUE_ID = `${FILTER_UNIT_ID_PREFIX}_Value`;
 const UI_ELEMENT_TEMPLATE = `
         <div>
             <div>
-                <h4 style="font-style: normal;">Unterstützungen eines Spielers auswählen</h4>
+                <h4 style="font-style: normal;">{{Header}}</h4>
+                <select>
+                    <option value=""></option>
+                    <option value="No Game No Life">No Game No Life</option>
+                </select>
                 <div id="${PLAYER_NAME_CONTAINER_ID}"></div>
             </div>
 
@@ -23,7 +29,7 @@ const UI_ELEMENT_TEMPLATE = `
                     <table id="${FILTER_TABLE_ID}">
                         <tbody>
                             <tr id="${FILTER_TABLE_HEADER_ID}">
-                                <th colspan="2">Filter</th>
+                                <th colspan="2">{{FilterHeader}}</th>
                             </tr>
                         </tbody>
                     </table>
@@ -32,7 +38,7 @@ const UI_ELEMENT_TEMPLATE = `
                         <tbody>
                             <tr>
                                 <td>
-                                    <input id="${FILTER_BUTTON_ID}" class="btn" type="submit" value="Filter anwenden">
+                                    <input id="${FILTER_BUTTON_ID}" class="btn" type="submit" value="{{FilterApplyButton}}">
                                 </td>
                             </tr>
                         </tbody>
@@ -49,7 +55,7 @@ const FILTER_TABLE_ROW_ELEMENT_TEMPLATE = `
             <td>
                 <label>
                     <input type="checkbox">
-                    %UNIT%
+                    {{Unit%UNIT%}}
                 </label>
             </td>
             <td>
@@ -70,8 +76,10 @@ const renderLayout = () => {
     const CONTENT_ROOT_ELEMENT_ID = 'content_value';
     const ANCHOR_ELEMENT = document.getElementById(CONTENT_ROOT_ELEMENT_ID).querySelector('h3');
 
+    let template = Translator.translateAndReplace(UI_ELEMENT_TEMPLATE);
+
     ANCHOR_ELEMENT.after(
-        createElement(UI_ELEMENT_TEMPLATE));
+        createElement(template));
 }
 
 const createPlayerNameElement = (playerName: string) => {
@@ -99,15 +107,6 @@ const renderPlayerNameSelectionInterface = (items: DefenceTableRow[], onclickFn:
 
         presentPlayerNames.push(item.data.playerName);
         ANCHOR_ELEMENT.appendChild(element);
-
-        if (i == items.length - 1) {
-            continue;
-        }
-
-        let span: HTMLSpanElement = document.createElement('span');
-        span.innerText = ' - ';
-
-        ANCHOR_ELEMENT.appendChild(span);
     }
 }
 
@@ -185,7 +184,9 @@ const renderFilterInterface = (items: DefenceTableRow[]) => {
     let filterTableBody = filterTable.querySelector('tbody');
 
     for (const key of items[0].data.units.keys()) {
-        let template = FILTER_TABLE_ROW_ELEMENT_TEMPLATE.replaceAll('%UNIT%', key,);
+        let template = FILTER_TABLE_ROW_ELEMENT_TEMPLATE.replaceAll('%UNIT%', key);
+        template = Translator.translateAndReplace(template);
+
         let filterItemElement = createElement(template) as HTMLTableRowElement;
 
         filterTableBody.appendChild(filterItemElement);

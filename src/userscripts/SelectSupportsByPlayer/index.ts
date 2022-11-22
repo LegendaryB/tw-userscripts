@@ -1,10 +1,15 @@
 import { render } from "./ui";
-import { DefenceTableRow, UIMessageService, UnitScreen } from "tw-framework";
+import { DefenceTableRow, Translator, UIMessageService, UnitScreen } from "tw-framework";
+
+import * as germanTranslations from "./i18n/de.json";
+import * as englishTranslations from "./i18n/en.json";
 
 (() => {
+    Translator.registerTranslationProvider('en', englishTranslations);
+    Translator.registerTranslationProvider('de', germanTranslations);
 
     const markSupportsByPlayer = (playerName: string, tableRowElements: DefenceTableRow[]): void => {
-        let msg = `Selected all supports of player '${playerName}'!`;
+        let msg = Translator.translate('SelectionMessage').replace('%PLAYER%', playerName);
 
         for (const tableRow of tableRowElements) {
             if (tableRow.element.style.display != '') {
@@ -19,7 +24,7 @@ import { DefenceTableRow, UIMessageService, UnitScreen } from "tw-framework";
                 checkbox.checked = !checkbox.checked;
 
                 if (!checkbox.checked) {
-                    msg = `Deselected all supports of player '${playerName}'!`;
+                    msg = Translator.translate('DeselectionMessage').replace('%PLAYER%', playerName);
                 }
             }
             else {
@@ -27,7 +32,7 @@ import { DefenceTableRow, UIMessageService, UnitScreen } from "tw-framework";
             }
         }
 
-        UIMessageService.showSuccessMessage(msg);
+        UIMessageService.showInfoMessage(msg);
     }
 
     let defenceTableRows = UnitScreen.getDefenceTableRows();
