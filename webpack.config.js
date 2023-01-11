@@ -24,7 +24,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    filename: '[name]/[name].js',
+    filename: '[name]/userscript.js',
   },
   plugins: [
     new CleanWebpackPlugin(),
