@@ -17,7 +17,7 @@
         }
     }
 
-    const getPlayers = async (allyInfoLink) => {
+    const getPlayers = async (allyInfoLink): Promise<string[]> => {
         let doc = await requestPageAndParse(allyInfoLink);
 
         let playerItems = Array.from(doc.querySelectorAll('[class=userimage-tiny]'));
@@ -31,7 +31,7 @@
         return playerNames;
     }
 
-    const getInADayInfo = async (playerName: string, type: string) => {
+    const getInADayInfo = async (playerName: string, type: string): Promise<number> => {
         try {
             let url = `/game.php?screen=ranking&mode=in_a_day&type=${type}&name=${encodeURIComponent(playerName)}`;
 
@@ -55,7 +55,7 @@
         <th>Raubzug</th>
         <th>Gesamt</th>`;
 
-    let tableHead = table.querySelector('tbody').firstElementChild;
+    let tableHead = table.querySelector('tbody').firstElementChild as HTMLTableRowElement;
     tableHead.insertAdjacentHTML('beforeend', headers);
 
     for (const allyInfoLink of allyInfoLinks) {

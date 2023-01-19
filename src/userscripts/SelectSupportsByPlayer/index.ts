@@ -1,10 +1,11 @@
-import { render } from "./ui";
-import { DefenceTableRow, Translator, UIMessageService, UnitScreen } from "tw-framework";
+/*import { render } from "./ui";
+import { getWorldConfiguration, getGameData, Translator, UIMessageService } from "tw-framework";
 
 import * as germanTranslations from "./i18n/de.json";
 import * as englishTranslations from "./i18n/en.json";
 
 (() => {
+
     Translator.registerTranslationProvider('en', englishTranslations);
     Translator.registerTranslationProvider('de', germanTranslations);
 
@@ -32,7 +33,7 @@ import * as englishTranslations from "./i18n/en.json";
             }
         }
 
-        UIMessageService.showInfoMessage(msg);
+        UIMessageService.InfoMessage(msg);
     }
 
     let defenceTableRows = UnitScreen.getDefenceTableRows();
@@ -46,3 +47,4 @@ import * as englishTranslations from "./i18n/en.json";
     render(defenceTableRows, onclickFn);
 
 })();
+*/

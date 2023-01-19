@@ -1,4 +1,4 @@
-import { DefenceTableRow, UnitScreen } from "tw-framework";
+/*import { DefenceTableRow, UnitScreen } from "tw-framework";
 import { createElement } from "tw-framework";
 
 import { Translator } from "tw-framework";
@@ -200,4 +200,4 @@ export const render = (items: DefenceTableRow[], onclickFn: (defenceTableRow: De
     renderLayout();
     renderPlayerNameSelectionInterface(items, onclickFn);
     renderFilterInterface(items);
-}
+}*/
