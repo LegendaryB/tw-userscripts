@@ -1,6 +1,6 @@
 # TribeFarmAndRZStats
 
-Fetches the farm and RZ stats of a tribe and displays them in the tribe ranking table.
+Fetches the farm and RZ stats of a tribe and displays them in the ranking table.
 
 Latest build can be found [here](https://github.com/LegendaryB/tw-userscripts/tree/main/dist/TribeFarmAndRZStats/userscript.js) (insert it into Tampermonkey)
 
