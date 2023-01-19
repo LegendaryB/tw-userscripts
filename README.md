@@ -9,3 +9,11 @@
 
 Userscripts for the famous browsergame TribalWars. Userscripts are developed for the german server but should work on other servers with some little adjustments.
 </div><br>
+
+## 📝 Usage
+
+All available scripts can be found [here](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts). To get more information about a script just navigate into the folder. There you can
+find a description of the script and details how to use it.
+
+## Building it yourself
+Normally the `dist` folder contains the latest build of the scripts. If you need to build the scripts yourself you can just `git clone` this repository and run the command `webpack` via `terminal`.

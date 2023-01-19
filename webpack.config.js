@@ -5,10 +5,10 @@ const TampermonkeyHeaderPlugin = require('./src/webpack/tampermonkey-header-webp
 
 module.exports = {
   entry: {
-    TribeFarmAndRZ: './src/userscripts/TribeFarmAndRZ/index.ts',
+    TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/index.ts',
     DebugScript: './src/userscripts/DebugScript/index.ts'
   },
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
