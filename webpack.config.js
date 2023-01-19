@@ -31,7 +31,7 @@ module.exports = {
     new TampermonkeyHeaderPlugin({
       resolveHeader: (dirname) => {
         let header = fs.readFileSync(
-          path.resolve(__dirname, 'src/userscripts', dirname, 'metadata/header.txt'),
+          path.resolve(__dirname, 'src/userscripts', dirname, 'header.txt'),
           'utf8');
 
         return header;
