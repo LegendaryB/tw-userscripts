@@ -1,4 +1,4 @@
-# Select supports from player
+# Select supports from player - work in progress (19.01.2023)
 
 Inserts a list of the supporting players in the gathering place. When a player name is clicked, all supports from the player will be selected and can be sent back
 
