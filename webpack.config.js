@@ -5,8 +5,9 @@ const TampermonkeyHeaderPlugin = require('./src/webpack/tampermonkey-header-webp
 
 module.exports = {
   entry: {
-    TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/index.ts',
-    DebugScript: './src/userscripts/DebugScript/index.ts'
+    DebugScript: './src/userscripts/DebugScript/src/index.ts',
+    TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/src/index.ts',
+    VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts'
   },
   mode: 'production',
   module: {
