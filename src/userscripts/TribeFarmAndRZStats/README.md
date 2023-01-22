@@ -1,4 +1,4 @@
-# TribeFarmAndRZStats
+# Tribe Farm and RZ stats
 
 Fetches the farm and RZ stats of a tribe and displays them in the ranking table.
 

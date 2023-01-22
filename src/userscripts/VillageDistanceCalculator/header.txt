@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         VillageDistanceCalculator
+// @name         Village Distance Calculator
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.4
 // @author       LegendaryB

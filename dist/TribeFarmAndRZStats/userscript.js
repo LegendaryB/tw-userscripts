@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         TribeFarmAndRZStats
+// @name         Tribe Farm and RZ stats
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.1
 // @author       LegendaryB

@@ -1,4 +1,4 @@
-# VillageDistanceCalculator
+# Village Distance Calculator
 
 Shows the distance between two selected villages
 
