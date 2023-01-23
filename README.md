@@ -17,3 +17,7 @@ find a description of the script and details how to use it.
 
 ## Building it yourself
 Normally the `dist` folder contains the latest build of the scripts. If you need to build the scripts yourself you can just `git clone` this repository and run the command `webpack` via `terminal`.
+
+## Available scripts
+- [Tribe Farm and RZ stats](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/TribeFarmAndRZStats)
+- [Village Distance Calculator](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/VillageDistanceCalculator)
