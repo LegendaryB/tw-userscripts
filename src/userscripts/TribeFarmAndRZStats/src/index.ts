@@ -1,22 +1,6 @@
+import { sleep, requestPageAndParse, getInADayInfo, InADayTypes } from "../../shared";
+
 (async () => {
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-    const requestPageAndParse = async (link: string) => {
-        try {
-            let response = await fetch(link);
-            let html = await response.text();
-
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, 'text/html');
-
-            return doc;
-        }
-        catch (err) {
-            debugger;
-            return undefined;
-        }
-    }
-
     const getPlayers = async (allyInfoLink): Promise<string[]> => {
         let doc = await requestPageAndParse(allyInfoLink);
 
@@ -29,22 +13,6 @@
         });
 
         return playerNames;
-    }
-
-    const getInADayInfo = async (playerName: string, type: string): Promise<number> => {
-        try {
-            let url = `/game.php?screen=ranking&mode=in_a_day&type=${type}&name=${encodeURIComponent(playerName)}`;
-
-            let doc = await requestPageAndParse(url);
-            let table = doc.getElementById('in_a_day_ranking_table');
-            let row = table.querySelector('[class=userimage-tiny]').closest('tr');
-            let points = Number(row.cells[3].innerText.replace('.', ''));
-
-            return points;
-        }
-        catch (err) {
-            return 0;
-        }
     }
 
     let table = document.getElementById('ally_ranking_table');
@@ -64,11 +32,11 @@
         let allyRz = 0;
 
         for (const playerName of playerNames) {
-            let farm = await getInADayInfo(playerName, "loot_res");
-            let rz = await getInADayInfo(playerName, "scavenge");
+            let farm = await getInADayInfo(playerName, 'loot_res');
+            let rz = await getInADayInfo(playerName, 'scavenge');
 
-            allyFarm += farm;
-            allyRz += rz;
+            allyFarm += farm.Points;
+            allyRz += rz.Points;
         }
 
         let allyTotal = allyFarm + allyRz;

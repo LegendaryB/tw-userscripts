@@ -1,10 +1,9 @@
 // ==UserScript==
-// @name         Village Distance Calculator
+// @name         BetterPlayerInfo
 // @namespace    https://github.com/LegendaryB/tw-userscripts
-// @version      0.4
+// @version      0.1
 // @author       LegendaryB
-// @include		 https://de*.die-staemme.de/game.php*screen=map*
-// @require      https://raw.githubusercontent.com/LegendaryB/tw-framework/main/dist/framework.js
+// @include      https://de*.die-staemme.de/game.php?*screen=info_player*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
 // @grant        none
 // ==/UserScript==
@@ -291,63 +290,83 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/index.ts":
-/*!****************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/index.ts ***!
-  \****************************************************************/
+/***/ "./src/userscripts/BetterPlayerInfo/src/index.ts":
+/*!*******************************************************!*\
+  !*** ./src/userscripts/BetterPlayerInfo/src/index.ts ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./templates */ \"./src/userscripts/VillageDistanceCalculator/src/templates/index.ts\");\n/* harmony import */ var tw_framework__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tw-framework */ \"../tw-framework/dist/index.js\");\n\r\n\r\nconst TABLE_ID = 'VillageDistanceCalculatorTable';\r\nconst TABLE_HEADER_ID = 'VillageDistanceCalculatorHeaders';\r\nconst TABLE_BODY_AREA_ID = 'VillageDistanceCalculatorBody';\r\nconst map = (0,tw_framework__WEBPACK_IMPORTED_MODULE_1__.getTWMap)();\r\nconst mapHandler = map.mapHandler;\r\nconst travelTimeTable = (0,_templates__WEBPACK_IMPORTED_MODULE_0__.createUnitTable)();\r\nlet scriptActive = false;\r\nlet selectedVillages = [];\r\nconst renderSelectionIndicator = (village, villageElement) => {\r\n    let template = (0,_templates__WEBPACK_IMPORTED_MODULE_0__.createSelectionIndicator)(village.id, villageElement.style.left, villageElement.style.top);\r\n    villageElement.insertAdjacentHTML('afterend', template);\r\n};\r\nconst insertTravelTimeTable = () => {\r\n    let anchor = document.getElementById('map_whole');\r\n    anchor.insertAdjacentHTML('afterend', travelTimeTable);\r\n};\r\nconst insertUnitTableHeader = (unit) => {\r\n    const tableHeaderElement = document.getElementById(TABLE_HEADER_ID);\r\n    const header = (0,_templates__WEBPACK_IMPORTED_MODULE_0__.createUnitTableHeader)(`https://dsde.innogamescdn.com/asset/f6f54c14/graphic/unit/unit_${unit.toLowerCase()}.png`);\r\n    tableHeaderElement.insertAdjacentHTML('beforeend', header);\r\n};\r\nconst insertUnitTableCell = (unit, value) => {\r\n    const tableBodyAreaElement = document.getElementById(TABLE_BODY_AREA_ID);\r\n    const cell = (0,_templates__WEBPACK_IMPORTED_MODULE_0__.createUnitTableCell)(unit.toLowerCase(), value);\r\n    tableBodyAreaElement.insertAdjacentHTML('beforeend', cell);\r\n};\r\nconst renderTravelTimeTable = async () => {\r\n    const unitInfo = await (0,tw_framework__WEBPACK_IMPORTED_MODULE_1__.getUnitInfo)();\r\n    const startVillage = selectedVillages[0];\r\n    const targetVillage = selectedVillages[1];\r\n    insertTravelTimeTable();\r\n    for (const key in unitInfo) {\r\n        const travelTime = (0,tw_framework__WEBPACK_IMPORTED_MODULE_1__.calcUnitTravelTimeBetweenVillages)(startVillage, targetVillage, unitInfo[key]);\r\n        insertUnitTableHeader(key);\r\n        insertUnitTableCell(key, convertTime(travelTime));\r\n    }\r\n};\r\nconst customSpawnSector = (data, sector) => {\r\n    mapHandler.integratedSpawnSector(data, sector);\r\n    for (const village of selectedVillages) {\r\n        let mapVillageElement = document.getElementById(`map_village_${village.id}`);\r\n        if (!mapVillageElement) {\r\n            continue;\r\n        }\r\n        renderSelectionIndicator(village, mapVillageElement);\r\n    }\r\n};\r\nconst handleTWMapVillageClick = async (x, y) => {\r\n    let village = map.villages[(x) * 1000 + y];\r\n    if (!village) {\r\n        return;\r\n    }\r\n    if (selectedVillages.length == 2) {\r\n        resetSelectedVillages();\r\n    }\r\n    tw_framework__WEBPACK_IMPORTED_MODULE_1__.UIMessageService.SuccessMessage(`Selected village: ${x}|${y}`);\r\n    let indexInSelectedVillagesArray = selectedVillages.findIndex(sv => sv.id == village.id);\r\n    if (indexInSelectedVillagesArray != -1) {\r\n        selectedVillages.splice(indexInSelectedVillagesArray, 1);\r\n    }\r\n    else {\r\n        selectedVillages.push(village);\r\n    }\r\n    map.reload();\r\n    if (selectedVillages.length == 2) {\r\n        await renderTravelTimeTable();\r\n    }\r\n};\r\nconst customClickFunction = (x, y, e) => {\r\n    handleTWMapVillageClick(x, y);\r\n    return false;\r\n};\r\nconst enableVillageSelection = () => {\r\n    tw_framework__WEBPACK_IMPORTED_MODULE_1__.UIMessageService.InfoMessage('VillageDistanceCalculator active');\r\n    scriptActive = true;\r\n    mapHandler.integratedSpawnSector = mapHandler.spawnSector;\r\n    mapHandler.spawnSector = customSpawnSector;\r\n    mapHandler.integratedClickFunction = mapHandler.onClick;\r\n    mapHandler.onClick = customClickFunction;\r\n    map.reload();\r\n};\r\nconst disableVillageSelection = () => {\r\n    tw_framework__WEBPACK_IMPORTED_MODULE_1__.UIMessageService.InfoMessage('VillageDistanceCalculator inactive');\r\n    scriptActive = false;\r\n    mapHandler.spawnSector = mapHandler.integratedSpawnSector;\r\n    mapHandler.onClick = mapHandler.integratedClickFunction;\r\n    resetSelectedVillages();\r\n};\r\nconst resetSelectedVillages = () => {\r\n    selectedVillages = [];\r\n    removeTravelTimeTable();\r\n    map.reload();\r\n};\r\nconst removeTravelTimeTable = () => {\r\n    let table = document.getElementById(TABLE_ID);\r\n    if (table) {\r\n        table.remove();\r\n    }\r\n};\r\nconst formatTime = (input) => {\r\n    return input < 10 ? `0${input}` : input;\r\n};\r\nconst convertTime = (input) => {\r\n    let input1 = Math.round(input * 60);\r\n    let seconds = (input1 % 60);\r\n    let input2 = Math.floor(input1 / 60);\r\n    let minutes = input2 % 60;\r\n    let input3 = Math.floor(input2 / 60);\r\n    let hours = input3 % 24;\r\n    let days = Math.floor(input3 / 24);\r\n    if (days > 0) {\r\n        hours += days * 24;\r\n    }\r\n    return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;\r\n};\r\ndocument.addEventListener('keydown', (event) => {\r\n    if (event.isComposing || event.key === 'd') {\r\n        if (!scriptActive) {\r\n            enableVillageSelection();\r\n        }\r\n        else {\r\n            disableVillageSelection();\r\n        }\r\n    }\r\n});\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var tw_framework__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tw-framework */ \"../tw-framework/dist/index.js\");\n/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules */ \"./src/userscripts/BetterPlayerInfo/src/modules/index.ts\");\n/* harmony import */ var _modules_FarmAndRZStats__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/FarmAndRZStats */ \"./src/userscripts/BetterPlayerInfo/src/modules/FarmAndRZStats.ts\");\n\r\n\r\n\r\n(async () => {\r\n    const playerInfoTable = tw_framework__WEBPACK_IMPORTED_MODULE_0__.PlayerInfoScreenScraper.getPlayerInfoTable();\r\n    const villageTable = tw_framework__WEBPACK_IMPORTED_MODULE_0__.PlayerInfoScreenScraper.getVillageTable();\r\n    _modules__WEBPACK_IMPORTED_MODULE_1__.CopyVillageCoordinates.attach(villageTable);\r\n    await _modules_FarmAndRZStats__WEBPACK_IMPORTED_MODULE_2__.FarmAndRZStats.attach(playerInfoTable);\r\n})();\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/index.ts?");
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/templates/SelectionIndicatorTemplate.ts":
-/*!***********************************************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/templates/SelectionIndicatorTemplate.ts ***!
-  \***********************************************************************************************/
+/***/ "./src/userscripts/BetterPlayerInfo/src/modules/CopyVillageCoordinates.ts":
+/*!********************************************************************************!*\
+  !*** ./src/userscripts/BetterPlayerInfo/src/modules/CopyVillageCoordinates.ts ***!
+  \********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createSelectionIndicator\": () => (/* binding */ createSelectionIndicator)\n/* harmony export */ });\nconst createSelectionIndicator = (villageId, left, top) => `\r\n    <div class=\"SelectionIndicator\" id=\"SelectionIndicator_${villageId}\"\r\n        style=\"outline: 2px dashed gold; width:52px; height:37px; position: absolute; z-index: 50; left: ${left}; top: ${top};\">\r\n    </div>\r\n`;\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/templates/SelectionIndicatorTemplate.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"CopyVillageCoordinates\": () => (/* binding */ CopyVillageCoordinates)\n/* harmony export */ });\n/* harmony import */ var tw_framework__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tw-framework */ \"../tw-framework/dist/index.js\");\n/* harmony import */ var _templates_CopyVillageCoordinatesTemplate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../templates/CopyVillageCoordinatesTemplate */ \"./src/userscripts/BetterPlayerInfo/src/templates/CopyVillageCoordinatesTemplate.ts\");\n\r\n\r\nclass CopyVillageCoordinates {\r\n    static attach(villageTableElement) {\r\n        const headerElement = villageTableElement.Header.Coordinates.Element;\r\n        const innerText = headerElement.innerText;\r\n        headerElement.innerHTML = _templates_CopyVillageCoordinatesTemplate__WEBPACK_IMPORTED_MODULE_1__.CopyVillageCoordinatesTemplate.populateTemplate(innerText);\r\n        const element = document.getElementById(_templates_CopyVillageCoordinatesTemplate__WEBPACK_IMPORTED_MODULE_1__.CopyVillageCoordinatesTemplate.ELEMENT_ID);\r\n        element.onclick = async () => await this.handleElementClick(villageTableElement.Rows);\r\n    }\r\n    static async handleElementClick(tableRows) {\r\n        let coordinates = [];\r\n        for (const row of tableRows) {\r\n            let coordinate = row.Coordinates;\r\n            coordinates.push(coordinate);\r\n        }\r\n        await navigator.clipboard.writeText(coordinates.join('\\n'));\r\n        tw_framework__WEBPACK_IMPORTED_MODULE_0__.UIMessageService.SuccessMessage('Village coordinates copied to clipboard!');\r\n    }\r\n}\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/modules/CopyVillageCoordinates.ts?");
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableCellTemplate.ts":
+/***/ "./src/userscripts/BetterPlayerInfo/src/modules/FarmAndRZStats.ts":
+/*!************************************************************************!*\
+  !*** ./src/userscripts/BetterPlayerInfo/src/modules/FarmAndRZStats.ts ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"FarmAndRZStats\": () => (/* binding */ FarmAndRZStats)\n/* harmony export */ });\n/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../shared */ \"./src/userscripts/shared/index.ts\");\n/* harmony import */ var _templates_FarmAndRZTemplate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../templates/FarmAndRZTemplate */ \"./src/userscripts/BetterPlayerInfo/src/templates/FarmAndRZTemplate.ts\");\n\r\n\r\nclass FarmAndRZStats {\r\n    static async attach(playerInfoTable) {\r\n        let playerName = document.querySelector('h2').innerText;\r\n        let farm = await (0,_shared__WEBPACK_IMPORTED_MODULE_0__.getInADayInfo)(playerName, 'loot_res');\r\n        let rz = await (0,_shared__WEBPACK_IMPORTED_MODULE_0__.getInADayInfo)(playerName, 'scavenge');\r\n        let anchor = playerInfoTable.Bashpoints.Element;\r\n        let farmElementHTML = _templates_FarmAndRZTemplate__WEBPACK_IMPORTED_MODULE_1__.FarmAndRZTemplate.populateTemplate('Farm', `${farm.Points.toLocaleString()} (${farm.Rank}.)`);\r\n        let rzElementHTML = _templates_FarmAndRZTemplate__WEBPACK_IMPORTED_MODULE_1__.FarmAndRZTemplate.populateTemplate('Raubzug', `${rz.Points.toLocaleString()} (${rz.Rank}.)`);\r\n        anchor.insertAdjacentHTML('afterend', farmElementHTML);\r\n        anchor.insertAdjacentHTML('afterend', rzElementHTML);\r\n    }\r\n}\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/modules/FarmAndRZStats.ts?");
+
+/***/ }),
+
+/***/ "./src/userscripts/BetterPlayerInfo/src/modules/index.ts":
+/*!***************************************************************!*\
+  !*** ./src/userscripts/BetterPlayerInfo/src/modules/index.ts ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"CopyVillageCoordinates\": () => (/* reexport safe */ _CopyVillageCoordinates__WEBPACK_IMPORTED_MODULE_0__.CopyVillageCoordinates),\n/* harmony export */   \"FarmAndRZStats\": () => (/* reexport safe */ _FarmAndRZStats__WEBPACK_IMPORTED_MODULE_1__.FarmAndRZStats)\n/* harmony export */ });\n/* harmony import */ var _CopyVillageCoordinates__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CopyVillageCoordinates */ \"./src/userscripts/BetterPlayerInfo/src/modules/CopyVillageCoordinates.ts\");\n/* harmony import */ var _FarmAndRZStats__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FarmAndRZStats */ \"./src/userscripts/BetterPlayerInfo/src/modules/FarmAndRZStats.ts\");\n\r\n\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/modules/index.ts?");
+
+/***/ }),
+
+/***/ "./src/userscripts/BetterPlayerInfo/src/templates/CopyVillageCoordinatesTemplate.ts":
 /*!******************************************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableCellTemplate.ts ***!
+  !*** ./src/userscripts/BetterPlayerInfo/src/templates/CopyVillageCoordinatesTemplate.ts ***!
   \******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createUnitTableCell\": () => (/* binding */ createUnitTableCell)\n/* harmony export */ });\nconst createUnitTableCell = (unit, value) => `\r\n    <td style=\"text-align: center;\" data-unit=\"${unit}\">${value}</td>\r\n`;\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableCellTemplate.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"CopyVillageCoordinatesTemplate\": () => (/* binding */ CopyVillageCoordinatesTemplate)\n/* harmony export */ });\nvar _a;\r\nclass CopyVillageCoordinatesTemplate {\r\n}\r\n_a = CopyVillageCoordinatesTemplate;\r\nCopyVillageCoordinatesTemplate.ELEMENT_ID = 'BetterPlayerInfo_CopyVillageCoordinates';\r\nCopyVillageCoordinatesTemplate.populateTemplate = (innerText) => `\r\n        <a id=\"${_a.ELEMENT_ID}\" style=\"cursor: pointer;\" title=\"Click to copy all &#10;&#13;village coordinates\">${innerText}</a>\r\n    `;\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/templates/CopyVillageCoordinatesTemplate.ts?");
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableHeaderTemplate.ts":
-/*!********************************************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableHeaderTemplate.ts ***!
-  \********************************************************************************************/
+/***/ "./src/userscripts/BetterPlayerInfo/src/templates/FarmAndRZTemplate.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/userscripts/BetterPlayerInfo/src/templates/FarmAndRZTemplate.ts ***!
+  \*****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createUnitTableHeader\": () => (/* binding */ createUnitTableHeader)\n/* harmony export */ });\nconst createUnitTableHeader = (img_src) => `\r\n    <th style=\"text-align: center;\">\r\n        <a href=\"#\" class=\"unit_link\"> <img src=\"${img_src}\"/></a>\r\n    </th>\r\n`;\r\n// todo: use IconAssetProvider\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableHeaderTemplate.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"FarmAndRZTemplate\": () => (/* binding */ FarmAndRZTemplate)\n/* harmony export */ });\nclass FarmAndRZTemplate {\r\n}\r\nFarmAndRZTemplate.populateTemplate = (title, value) => `\r\n        <tr>\r\n            <td>${title}:</td>\r\n            <td>${value}</td>\r\n        </tr>\r\n    `;\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/BetterPlayerInfo/src/templates/FarmAndRZTemplate.ts?");
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableTemplate.ts":
-/*!**************************************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableTemplate.ts ***!
-  \**************************************************************************************/
+/***/ "./src/userscripts/shared/getInADayInfo.ts":
+/*!*************************************************!*\
+  !*** ./src/userscripts/shared/getInADayInfo.ts ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createUnitTable\": () => (/* binding */ createUnitTable)\n/* harmony export */ });\nconst createUnitTable = () => `\r\n    <table id=\"VillageDistanceCalculatorTable\" class=\"vis\" style=\"border-spacing: 0px; border-collapse: collapse; table-layout: fixed;\" width=\"100%\">\r\n        <thead>\r\n            <tr id=\"VillageDistanceCalculatorHeaders\">\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr id=\"VillageDistanceCalculatorBody\">\r\n            </tr>\r\n        </tbody>\r\n    </table>\r\n`;\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableTemplate.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"getInADayInfo\": () => (/* binding */ getInADayInfo),\n/* harmony export */   \"requestPageAndParse\": () => (/* binding */ requestPageAndParse),\n/* harmony export */   \"sleep\": () => (/* binding */ sleep)\n/* harmony export */ });\nconst sleep = ms => new Promise(r => setTimeout(r, ms));\r\nconst requestPageAndParse = async (link) => {\r\n    try {\r\n        let response = await fetch(link);\r\n        let html = await response.text();\r\n        let parser = new DOMParser();\r\n        let doc = parser.parseFromString(html, 'text/html');\r\n        return doc;\r\n    }\r\n    catch (err) {\r\n        debugger;\r\n        return undefined;\r\n    }\r\n};\r\n// todo: move to framework?\r\nconst getInADayInfo = async (playerName, type) => {\r\n    try {\r\n        let url = `/game.php?screen=ranking&mode=in_a_day&type=${type}&name=${encodeURIComponent(playerName)}`;\r\n        let doc = await requestPageAndParse(url);\r\n        let table = doc.getElementById('in_a_day_ranking_table');\r\n        let row = table.querySelector('[class=userimage-tiny]').closest('tr');\r\n        let rank = row.cells[0].innerText;\r\n        let points = Number(row.cells[3].innerText.replace('.', ''));\r\n        return {\r\n            Rank: rank,\r\n            Points: points\r\n        };\r\n    }\r\n    catch (err) {\r\n        return 0;\r\n    }\r\n};\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/shared/getInADayInfo.ts?");
 
 /***/ }),
 
-/***/ "./src/userscripts/VillageDistanceCalculator/src/templates/index.ts":
-/*!**************************************************************************!*\
-  !*** ./src/userscripts/VillageDistanceCalculator/src/templates/index.ts ***!
-  \**************************************************************************/
+/***/ "./src/userscripts/shared/index.ts":
+/*!*****************************************!*\
+  !*** ./src/userscripts/shared/index.ts ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createSelectionIndicator\": () => (/* reexport safe */ _SelectionIndicatorTemplate__WEBPACK_IMPORTED_MODULE_3__.createSelectionIndicator),\n/* harmony export */   \"createUnitTable\": () => (/* reexport safe */ _UnitTableTemplate__WEBPACK_IMPORTED_MODULE_0__.createUnitTable),\n/* harmony export */   \"createUnitTableCell\": () => (/* reexport safe */ _UnitTableCellTemplate__WEBPACK_IMPORTED_MODULE_2__.createUnitTableCell),\n/* harmony export */   \"createUnitTableHeader\": () => (/* reexport safe */ _UnitTableHeaderTemplate__WEBPACK_IMPORTED_MODULE_1__.createUnitTableHeader)\n/* harmony export */ });\n/* harmony import */ var _UnitTableTemplate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UnitTableTemplate */ \"./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableTemplate.ts\");\n/* harmony import */ var _UnitTableHeaderTemplate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UnitTableHeaderTemplate */ \"./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableHeaderTemplate.ts\");\n/* harmony import */ var _UnitTableCellTemplate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UnitTableCellTemplate */ \"./src/userscripts/VillageDistanceCalculator/src/templates/UnitTableCellTemplate.ts\");\n/* harmony import */ var _SelectionIndicatorTemplate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SelectionIndicatorTemplate */ \"./src/userscripts/VillageDistanceCalculator/src/templates/SelectionIndicatorTemplate.ts\");\n\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/VillageDistanceCalculator/src/templates/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"getInADayInfo\": () => (/* reexport safe */ _getInADayInfo__WEBPACK_IMPORTED_MODULE_0__.getInADayInfo),\n/* harmony export */   \"requestPageAndParse\": () => (/* reexport safe */ _getInADayInfo__WEBPACK_IMPORTED_MODULE_0__.requestPageAndParse),\n/* harmony export */   \"sleep\": () => (/* reexport safe */ _getInADayInfo__WEBPACK_IMPORTED_MODULE_0__.sleep)\n/* harmony export */ });\n/* harmony import */ var _getInADayInfo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getInADayInfo */ \"./src/userscripts/shared/getInADayInfo.ts\");\n\r\n\n\n//# sourceURL=webpack://tw-userscripts/./src/userscripts/shared/index.ts?");
 
 /***/ })
 
@@ -411,7 +430,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/userscripts/VillageDistanceCalculator/src/index.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/userscripts/BetterPlayerInfo/src/index.ts");
 /******/ 	
 /******/ })()
 ;

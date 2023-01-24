@@ -1,0 +1,9 @@
+// ==UserScript==
+// @name         BetterPlayerInfo
+// @namespace    https://github.com/LegendaryB/tw-userscripts
+// @version      0.1
+// @author       LegendaryB
+// @include      https://de*.die-staemme.de/game.php?*screen=info_player*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
+// @grant        none
+// ==/UserScript==

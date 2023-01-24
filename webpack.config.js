@@ -7,9 +7,10 @@ module.exports = {
   entry: {
     DebugScript: './src/userscripts/DebugScript/src/index.ts',
     TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/src/index.ts',
-    VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts'
+    VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts',
+    BetterPlayerInfo: './src/userscripts/BetterPlayerInfo/src/index.ts',
   },
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
