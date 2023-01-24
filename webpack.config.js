@@ -10,7 +10,7 @@ module.exports = {
     VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts',
     BetterPlayerInfo: './src/userscripts/BetterPlayerInfo/src/index.ts',
   },
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
