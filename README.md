@@ -21,3 +21,4 @@ Normally the `dist` folder contains the latest build of the scripts. If you need
 ## Available scripts
 - [Tribe Farm and RZ stats](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/TribeFarmAndRZStats)
 - [Village Distance Calculator](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/VillageDistanceCalculator)
+- [BetterPlayerInfo](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/BetterPlayerInfo)
