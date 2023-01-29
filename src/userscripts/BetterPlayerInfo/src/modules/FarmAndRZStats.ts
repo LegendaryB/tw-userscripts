@@ -13,6 +13,41 @@ declare global {
     }
 }
 
+/**
+ * Function to wait for properties
+ * @param {object} object - the object
+ * @param {string} property - name of the property to wait for
+ * @param {number} timeout - optional, maximum waiting time in ms
+ */
+function waitForProperty(object: any, property: string, timeout: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+        let isWaiting = true;
+
+        // Waiting loop
+        const checkForProperty = () => {
+            if (object[property]) {
+                isWaiting = false;
+                resolve();
+            } else {
+                setTimeout(() => {
+                    if (isWaiting) checkForProperty();
+                }, 100);
+            }
+        };
+        checkForProperty();
+
+        // Stop waiting if timed out
+        if (timeout) {
+            setTimeout(() => {
+                if (isWaiting) {
+                    isWaiting = false;
+                    reject();
+                }
+            }, timeout);
+        }
+    })
+}
+
 const InfoPlayer = window.InfoPlayer as InfoPlayer;
 const game_data = getGameData();
 
@@ -20,7 +55,9 @@ export class FarmAndRZStats {
     public static async attach(playerInfoTable: PlayerInfoTableElement) {
         let playerName = document.querySelector('h2').innerText;
 
-        if (InfoPlayer.player_id == game_data.player.player_id) {
+        await waitForProperty(window.InfoPlayer, 'player_id', 4000);
+
+        if (InfoPlayer.player_id == game_data.player.id) {
             playerName = game_data.player.name;
         }
 
@@ -29,8 +66,11 @@ export class FarmAndRZStats {
 
         let anchor = playerInfoTable.Bashpoints.Element;
 
-        let farmElementHTML = FarmAndRZTemplate.populateTemplate('Farm', `${farm.Points.toLocaleString()} (${farm.Rank}.)`);
-        let rzElementHTML = FarmAndRZTemplate.populateTemplate('Raubzug', `${rz.Points.toLocaleString()} (${rz.Rank}.)`);
+        let farmDisplayValue = farm.Points > 0 ? `${farm.Points.toLocaleString()} (${farm.Rank}.)` : farm.Points.toLocaleString();
+        let rzDisplayValue = rz.Points > 0 ? `${rz.Points.toLocaleString()} (${rz.Rank}.)` : rz.Points.toLocaleString();
+
+        let farmElementHTML = FarmAndRZTemplate.populateTemplate('Geplündert', farmDisplayValue);
+        let rzElementHTML = FarmAndRZTemplate.populateTemplate('Gesammelt', rzDisplayValue);
 
         anchor.insertAdjacentHTML('afterend', farmElementHTML);
         anchor.insertAdjacentHTML('afterend', rzElementHTML);

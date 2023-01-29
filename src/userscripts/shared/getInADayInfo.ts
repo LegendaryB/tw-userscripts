@@ -24,18 +24,28 @@ export const getInADayInfo = async (playerName: string, type: InADayTypes): Prom
         let url = `/game.php?screen=ranking&mode=in_a_day&type=${type}&name=${encodeURIComponent(playerName)}`;
 
         let doc = await requestPageAndParse(url);
+
+        let noStatsElement = doc.querySelectorAll('em');
+
+        if (noStatsElement.length > 0) {
+            return {
+                Rank: 0,
+                Points: 0
+            }
+        }
+
         let table = doc.getElementById('in_a_day_ranking_table');
         let row = table.querySelector('[class=userimage-tiny]').closest('tr');
-        
-        let rank =row.cells[0].innerText;
-        let points = Number(row.cells[3].innerText.replace('.', ''));
 
         return {
-            Rank: rank,
-            Points: points
+            Rank: Number(row.cells[0].innerText),
+            Points: Number(row.cells[3].innerText.replace('.', ''))
         };
     }
     catch (err) {
-        return 0;
+        return {
+            Rank: 0,
+            Points: 0
+        }
     }
 }
