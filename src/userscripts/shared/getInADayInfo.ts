@@ -39,7 +39,7 @@ export const getInADayInfo = async (playerName: string, type: InADayTypes): Prom
 
         return {
             Rank: Number(row.cells[0].innerText),
-            Points: Number(row.cells[3].innerText.replace('.', ''))
+            Points: Number(row.cells[3].innerText.replaceAll('.', ''))
         };
     }
     catch (err) {
