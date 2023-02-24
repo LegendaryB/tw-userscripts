@@ -10,7 +10,8 @@ module.exports = {
     VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts',
     BetterPlayerInfo: './src/userscripts/BetterPlayerInfo/src/index.ts',
     CountOwnSupport: './src/userscripts/CountOwnSupport/src/index.ts',
-    SendBackButtonOnTop: './src/userscripts/SendBackButtonOnTop/src/index.ts'
+    SendBackButtonOnTop: './src/userscripts/SendBackButtonOnTop/src/index.ts',
+    SelectSupportingPlayer: './src/userscripts/SelectSupportingPlayer/src/index.ts'
   },
   mode: 'production',
   module: {

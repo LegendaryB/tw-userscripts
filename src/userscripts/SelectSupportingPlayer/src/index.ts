@@ -1,50 +1,89 @@
-/*import { render } from "./ui";
-import { getWorldConfiguration, getGameData, Translator, UIMessageService } from "tw-framework";
-
-import * as germanTranslations from "./i18n/de.json";
-import * as englishTranslations from "./i18n/en.json";
-
 (() => {
+    const playerSelectId = 'SelectSupportingPlayer';
+    const playerSelectTemplate = `<select style="float: right;" id="${playerSelectId}"></select>`;
 
-    Translator.registerTranslationProvider('en', englishTranslations);
-    Translator.registerTranslationProvider('de', germanTranslations);
+    const getPlayerName = (row: HTMLTableRowElement) => {
+        let source = row.cells[1].innerText;
+        let matches = source.match(/\(([^()]*)\)/g);
 
-    const markSupportsByPlayer = (playerName: string, tableRowElements: DefenceTableRow[]): void => {
-        let msg = Translator.translate('SelectionMessage').replace('%PLAYER%', playerName);
+        return matches[0].replace("(", "").replace(")", "");
+    }
 
-        for (const tableRow of tableRowElements) {
-            if (tableRow.element.style.display != '') {
-                // ignore not displayed rows
-                continue; 
+    const findPlayerNames = (rows: HTMLTableRowElement[]) => {
+        let names = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            let name = getPlayerName(row);
+
+            if (!names.includes(name)) {
+                names.push(name);
             }
+        }
 
-            let checkbox = tableRow.element.firstElementChild.firstElementChild as HTMLInputElement;
+        return names;
+    }
 
+    const appendSelectOptionElement = (selectElement: HTMLSelectElement, value: string) => {
+        let element = document.createElement('option');
+        element.value = value;
+        element.innerText = value;
 
-            if (tableRow.data.playerName == playerName) {
-                checkbox.checked = !checkbox.checked;
+        selectElement.add(element);
+    }
 
-                if (!checkbox.checked) {
-                    msg = Translator.translate('DeselectionMessage').replace('%PLAYER%', playerName);
-                }
+    const fillPlayerSelectOptions = (selectElement: HTMLSelectElement, names: string[]) => {
+        appendSelectOptionElement(selectElement, '');
+
+        for (const name of names) {
+            appendSelectOptionElement(selectElement, name);
+        }
+    }
+
+    const executeOnSupportRows = (rows: HTMLTableRowElement[], action: (playerName: string, checkbox: HTMLInputElement) => void) => {
+        for (const row of rows) {
+            let playerName = getPlayerName(row);
+            let checkbox = row.querySelector('[name^="id_"]') as HTMLInputElement;
+
+            action(playerName, checkbox);
+        }
+    }
+
+    const selectSupports = (value: string, rows: HTMLTableRowElement[]) => {
+        executeOnSupportRows(rows, (playerName: string, checkbox: HTMLInputElement) => {
+            if (playerName === value) {
+                checkbox.checked = true;
             }
             else {
                 checkbox.checked = false;
             }
+        });
+    }
+
+    const clearSupports = (rows: HTMLTableRowElement[]) => {
+        executeOnSupportRows(rows, (playerName: string, checkbox: HTMLInputElement) => {
+            checkbox.checked = false;
+        });
+    }
+
+    document.getElementById('units_home').parentElement.insertAdjacentHTML('beforebegin', playerSelectTemplate);
+
+    let selectElement = document.getElementById(playerSelectId) as HTMLSelectElement;
+
+    let elements = [...document.querySelectorAll<HTMLInputElement>('[name^="id_"]')];
+    let rows = elements.map(e => e.closest('tr'));
+    let playerNames = findPlayerNames(rows);
+
+    fillPlayerSelectOptions(selectElement, playerNames);
+
+    selectElement.onchange = (ev: Event) => {
+        let value = selectElement.value;
+
+        if (value.length > 0) {
+            selectSupports(value, rows);
         }
-
-        UIMessageService.InfoMessage(msg);
+        else {
+            clearSupports(rows);
+        }
     }
-
-    let defenceTableRows = UnitScreen.getDefenceTableRows();
-
-    if (defenceTableRows.length == 0) {
-        return;
-    }
-
-    const onclickFn = (defenceTableRow: DefenceTableRow) => markSupportsByPlayer(defenceTableRow.data.playerName, defenceTableRows);
-
-    render(defenceTableRows, onclickFn);
-
 })();
-*/
