@@ -1,10 +1,11 @@
+import { UIMessageService } from "tw-framework";
 import { requestPageAndParse } from "../../shared";
 
 (async() => {
     const incomingsTableHeaderId = 'ShowAttacksOnVillageHeader';
 
     const incomingsTableTemplate = `
-        <table class="vis" style="float: right;">
+        <table class="vis">
             <tbody>
                 <tr id="${incomingsTableHeaderId}">
                     <th colspan="2">
@@ -22,6 +23,12 @@ import { requestPageAndParse } from "../../shared";
     }
 
     const target = document.querySelector('.village_anchor').querySelector('a').href;
+    const commands = await getCommandsOnTargetVillage(target);
+
+    if (commands.length === 0) {
+        UIMessageService.InfoMessage('Keine Befehle für das Zieldorf gefunden');
+        return;
+    }
 
     const container = document.getElementById('command-data-form').querySelector('div') as HTMLDivElement;
     container.style.display = 'table-row';
@@ -32,7 +39,6 @@ import { requestPageAndParse } from "../../shared";
     container.insertAdjacentHTML('beforeend', incomingsTableTemplate);
 
     const incomingsTableRow = document.getElementById(incomingsTableHeaderId) as HTMLTableRowElement;
-    const commands = await getCommandsOnTargetVillage(target);
 
     let anchor = incomingsTableRow;
 
@@ -42,4 +48,6 @@ import { requestPageAndParse } from "../../shared";
 
         anchor = command;
     }
+
+    UIMessageService.SuccessMessage('Befehle für das Zieldorf geladen');
 })();
