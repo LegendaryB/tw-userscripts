@@ -10,7 +10,7 @@ module.exports = {
     DebugScript: './src/userscripts/DebugScript/src/index.ts',
     SelectSupportingPlayer: './src/userscripts/SelectSupportingPlayer/src/index.ts',
     SendBackButtonOnTop: './src/userscripts/SendBackButtonOnTop/src/index.ts',
-    ShowCommandsOnVillage: './src/userscripts/ShowCommandsOnVillage/src/index.ts',
+    ShowCommandsForVillage: './src/userscripts/ShowCommandsForVillage/src/index.ts',
     TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/src/index.ts',
     VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts',
   },
