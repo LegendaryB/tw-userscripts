@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         SelectSupportingPlayer
+// @author       LegendaryB
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.1
-// @author       LegendaryB
 // @include		 https://de*.die-staemme.de/game.php*screen=place*&mode=units*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
+// @downloadURL  https://github.com/LegendaryB/tw-userscripts/raw/main/dist/SelectSupportingPlayer/SelectSupportingPlayer.user.js
+// @updateURL    https://github.com/LegendaryB/tw-userscripts/raw/main/dist/SelectSupportingPlayer/SelectSupportingPlayer.user.js
 // @grant        none
 // ==/UserScript==
 

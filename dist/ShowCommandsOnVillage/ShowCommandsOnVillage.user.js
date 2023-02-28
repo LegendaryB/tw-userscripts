@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         ShowAttacksOnVillage
+// @name         ShowCommandsOnVillage
+// @author       LegendaryB
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.1
-// @author       LegendaryB
 // @match		 https://*.die-staemme.de/game.php*&screen=place&try=confirm
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
+// @downloadURL  https://github.com/LegendaryB/tw-userscripts/raw/main/dist/ShowCommandsOnVillage/ShowCommandsOnVillage.user.js
+// @updateURL    https://github.com/LegendaryB/tw-userscripts/raw/main/dist/ShowCommandsOnVillage/ShowCommandsOnVillage.user.js
 // @grant        none
 // ==/UserScript==
 

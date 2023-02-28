@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         Village Distance Calculator
+// @name         VillageDistanceCalculator
+// @author       LegendaryB
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.4
-// @author       LegendaryB
 // @include		 https://de*.die-staemme.de/game.php*screen=map*
-// @require      https://raw.githubusercontent.com/LegendaryB/tw-framework/main/dist/framework.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
+// @downloadURL  https://github.com/LegendaryB/tw-userscripts/raw/main/dist/VillageDistanceCalculator/VillageDistanceCalculator.user.js
+// @updateURL    https://github.com/LegendaryB/tw-userscripts/raw/main/dist/VillageDistanceCalculator/VillageDistanceCalculator.user.js
 // @grant        none
 // ==/UserScript==

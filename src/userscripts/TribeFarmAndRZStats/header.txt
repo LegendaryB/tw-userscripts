@@ -1,9 +1,11 @@
 // ==UserScript==
-// @name         Tribe Farm and RZ stats
+// @name         TribeFarmAndRZStats
+// @author       LegendaryB
 // @namespace    https://github.com/LegendaryB/tw-userscripts
 // @version      0.1
-// @author       LegendaryB
 // @match		 https://*.die-staemme.de/game.php*screen=ranking*&mode=ally*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=die-staemme.de
+// @downloadURL  https://github.com/LegendaryB/tw-userscripts/raw/main/dist/TribeFarmAndRZStats/TribeFarmAndRZStats.user.js
+// @updateURL    https://github.com/LegendaryB/tw-userscripts/raw/main/dist/TribeFarmAndRZStats/TribeFarmAndRZStats.user.js
 // @grant        none
 // ==/UserScript==
