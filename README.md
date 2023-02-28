@@ -19,6 +19,10 @@ find a description of the script and details how to use it.
 Normally the `dist` folder contains the latest build of the scripts. If you need to build the scripts yourself you can just `git clone` this repository and run the command `webpack` via `terminal`.
 
 ## Available scripts
-- [Tribe Farm and RZ stats](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/TribeFarmAndRZStats)
-- [Village Distance Calculator](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/VillageDistanceCalculator)
 - [BetterPlayerInfo](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/BetterPlayerInfo)
+- [CountOwnSupport](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/CountOwnSupport)
+- [SelectSupportingPlayer](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/SelectSupportingPlayer)
+- [SendBackButtonOnTop](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/SendBackButtonOnTop)
+- [ShowCommandsForVillage](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/ShowCommandsForVillage)
+- [TribeFarmAndRZStats](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/TribeFarmAndRZStats)
+- [VillageDistanceCalculator](https://github.com/LegendaryB/tw-userscripts/tree/main/src/userscripts/VillageDistanceCalculator)
