@@ -1,10 +1,20 @@
-import { getGameData } from "tw-framework";
+import { getGameData, UIMessageService } from "tw-framework";
 import { sleep } from "../../shared";
 
 (async () => {
     const customTableRowId = 'CountOwnSupportsRow';
-    const customButtonId = 'CountOwnSupportBtn';
-    const customButtonTemplate = `<button id="${customButtonId}" class="btn">Eigene zählen</button>`;
+    const anchorElementId = 'CountOwnSupportBtn';
+    const tableRowTemplate = `
+        <tr>
+            <td colspan="2">
+                <a id="${anchorElementId}" href="javascript:;">
+                    <span class="action-icon-container">
+                        <span class="icon header troops"></span>
+                    </span>
+                    Eigene Unterstützung zählen
+                </a>
+            </td>
+        </tr>`;
 
     const createTableRowForOwnSupports = () => {
         document.getElementById(customTableRowId)?.remove();
@@ -54,8 +64,15 @@ import { sleep } from "../../shared";
     };
 
     const countOwnSupportsButtonHandler = async () => {
-        const tableRow = createTableRowForOwnSupports();
         const units = await countUnits();
+        const unitsEntries = Object.entries(units);
+
+        if (unitsEntries.length === 0) {
+            UIMessageService.ErrorMessage('Keine ausgehende Unterstützung gefunden!');
+            return;
+        }
+
+        const tableRow = createTableRowForOwnSupports();
 
         for (const [key, value] of Object.entries(units)) {
             const selector = `[data-unit="${key}"]`;
@@ -80,12 +97,10 @@ import { sleep } from "../../shared";
         return;
     }
 
-    const commandsTable = commandsContainer.querySelector('table');
-    const commandsTableHeader = commandsTable.querySelector('th');
+    const anchorElement = document.querySelector('.action-icon-container').closest('tr');
+    anchorElement.insertAdjacentHTML('afterend', tableRowTemplate);
 
-    commandsTableHeader.insertAdjacentHTML('beforeend', customButtonTemplate);
-
-    const countOwnSupportBtn = document.querySelector(`#${customButtonId}`) as HTMLButtonElement;
+    const countOwnSupportBtn = document.querySelector(`#${anchorElementId}`) as HTMLAnchorElement;
 
     countOwnSupportBtn.onclick = async () => await countOwnSupportsButtonHandler();
 })();
