@@ -1,3 +1,5 @@
+// todo: transform into typescript
+
 const { Compilation } = require('webpack');
 const { ConcatSource } = require("webpack-sources");
 const path = require('path');

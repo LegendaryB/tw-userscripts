@@ -8,4 +8,4 @@
 // @grant        none
 // ==/UserScript==
 
-(async()=>{const e=document.querySelector('[name="back"]');e.style.marginBottom="1em",document.getElementById("units_home").parentElement.before(e)})();
+(async()=>{const e=document.querySelector('[name="back"]');e.style.marginBottom="1em",document.getElementById("units_home").parentElement.prepend(e)})();
