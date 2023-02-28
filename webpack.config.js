@@ -7,7 +7,6 @@ module.exports = {
   entry: {
     BetterPlayerInfo: './src/userscripts/BetterPlayerInfo/src/index.ts',
     CountOwnSupport: './src/userscripts/CountOwnSupport/src/index.ts',
-    DebugScript: './src/userscripts/DebugScript/src/index.ts',
     SelectSupportingPlayer: './src/userscripts/SelectSupportingPlayer/src/index.ts',
     SendBackButtonOnTop: './src/userscripts/SendBackButtonOnTop/src/index.ts',
     ShowCommandsForVillage: './src/userscripts/ShowCommandsForVillage/src/index.ts',
