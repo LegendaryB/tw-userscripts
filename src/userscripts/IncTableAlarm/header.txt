@@ -1,0 +1,9 @@
+// ==UserScript==
+// @name        Faze_Inc_Table_Alarm
+// @author      Faze, LegendaryB
+// @version     0.3
+// @description Plays an alarm sound when a incoming attack will arive in the next configured minutes
+// @grant       unsafeWindow
+// @run-at      document-idle
+// @match       https://*/game.php?*
+// ==/UserScript==

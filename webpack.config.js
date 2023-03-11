@@ -12,6 +12,7 @@ module.exports = {
     ShowCommandsForVillage: './src/userscripts/ShowCommandsForVillage/src/index.ts',
     TribeFarmAndRZStats: './src/userscripts/TribeFarmAndRZStats/src/index.ts',
     VillageDistanceCalculator: './src/userscripts/VillageDistanceCalculator/src/index.ts',
+    IncTableAlarm: './src/userscripts/IncTableAlarm/src/index.ts'
   },
   mode: 'production',
   module: {

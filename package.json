@@ -13,6 +13,7 @@
   "author": "LegendaryB",
   "license": "MIT",
   "devDependencies": {
+    "@types/tampermonkey": "^4.0.10",
     "@types/webpack-sources": "^3.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "ts-loader": "^9.4.1",
