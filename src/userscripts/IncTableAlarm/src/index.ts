@@ -61,7 +61,7 @@ const ALARM_BEFORE_MINS = 2;
                 await main();
             }, remainingTime.ms);
             
-        }, remainingTime.ms - toMilliseconds(0, ALARM_BEFORE_MINS * 1000, 0))
+        }, remainingTime.ms - toMilliseconds(0, ALARM_BEFORE_MINS, 0))
     }
 
     await main();
